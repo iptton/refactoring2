@@ -99,6 +99,10 @@ function amountFor(pref:Performance, play:Play) {
     return thisAmount;
 }
 
+// 修改完毕后，执行单测，发现正常
+// 要养成重构后即时运行测试的习惯，因为犯错是容易的
+// 测试通过后，需要把代码提交到git上。以便后面搞砸了可以回滚。
+
 module.exports = {
     plays: plays,
     invoices: invoices,
