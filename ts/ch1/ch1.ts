@@ -1,6 +1,5 @@
 import { isMainThread } from "worker_threads";
 
-
 let plays:{[key: string]: {"name":string,"type":"tragedy" | "comedy";};} = {
     "hamlet": {"name": "Hamlet", "type": "tragedy"},
     "as-like": {"name": "As You Like It", "type": "comedy"},
@@ -86,4 +85,11 @@ function main(){
     }
 }
 
-main();
+// 第一步，拆解
+// ac
+
+module.exports = {
+    plays: plays,
+    invoices: invoices,
+    statement: statement
+}

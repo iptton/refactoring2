@@ -1,0 +1,44 @@
+{
+  "name": "refactoring2",
+  "version": "1.0.0",
+  "description": "refactoring 2 learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iptton/refactoring2.git"
+  },
+  "author": "ippan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iptton/refactoring2/issues"
+  },
+  "jest": {
+    "rootDir": ".",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__test__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "homepage": "https://github.com/iptton/refactoring2#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@types/jest": "^25.2.1",
+    "babel-jest": "^25.3.0",
+    "jest": "^25.3.0",
+    "ts-jest": "^25.3.1",
+    "typescript": "^3.8.3"
+  }
+}
