@@ -46,11 +46,11 @@ function statement(
          volumeCredits  += volumeCreditsFor(perf);
 
         // print line for this order
-        result += `${playFor(perf).name}: ${usd(amountFor(perf)/100)} (${perf.audience}) seats)\n`
+        result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}) seats)\n`
         totalAmount += amountFor(perf);
     }
 
-    result += `Amount owed is ${usd(totalAmount/100)}\n`;
+    result += `Amount owed is ${usd(totalAmount)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
     return result;
 }
@@ -75,7 +75,7 @@ function main(){
 // 他们格式类似，可以转换成一个函数
 
 // 首先，检查哪些变量会离开原本的作用域
-// 此例中是： pref / play 和 thisAmount 
+// 此例中是： pref / play 和 thisAmount
 // 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
 // 因此，可以将之当成函数返回值
 function amountFor(aPerformance:Performance) {
@@ -108,7 +108,7 @@ function usd(aNumber) : string {
     return new Intl.NumberFormat("en-US",{
         style: "currency", currency: "USD",
         minimumFractionDigits: 2
-    }).format(aNumber);
+    }).format(aNumber/100);
 }
 
 // 修改完毕后，执行单测，发现正常
