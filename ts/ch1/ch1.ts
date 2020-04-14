@@ -78,25 +78,25 @@ function main(){
 // 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
 // 因此，可以将之当成函数返回值
 function amountFor(pref:Performance, play:Play) {
-    let thisAmount = 0;
+    let result = 0;
     switch (play.type) {
         case "tragedy":
-            thisAmount = 40_000;
+            result = 40_000;
             if(pref.audience > 30) {
-                thisAmount += 1000 * (pref.audience - 30);
+                result += 1000 * (pref.audience - 30);
             }
             break;
         case "comedy":
-            thisAmount = 30_000;
+            result = 30_000;
             if(pref.audience > 20) {
-                thisAmount += 10_000 + 500 * (pref.audience -  20);
+                result += 10_000 + 500 * (pref.audience -  20);
             }
-            thisAmount += 300 * pref.audience;
+            result += 300 * pref.audience;
             break;
         default:
             throw new Error(`Unknown type ${play.type}`);
     }
-    return thisAmount;
+    return result;
 }
 
 // 修改完毕后，执行单测，发现正常
