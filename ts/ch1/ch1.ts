@@ -46,7 +46,7 @@ function statement(
 
     for(let perf of invoice.performances){
         const play = plays[perf.playID];
-        let thisAmount = amountFor(perf,play);
+        let thisAmount = amountFor(perf);
 
         // add volume credits
         volumeCredits += Math.max(perf.audience - 30, 0);
@@ -77,7 +77,8 @@ function main(){
 // 此例中是： pref / play 和 thisAmount 
 // 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
 // 因此，可以将之当成函数返回值
-function amountFor(aPerformance:Performance, play:Play) {
+function amountFor(aPerformance:Performance) {
+    let play = playFor(aPerformance);
     let result = 0;
     switch (play.type) {
         case "tragedy":
@@ -97,6 +98,10 @@ function amountFor(aPerformance:Performance, play:Play) {
             throw new Error(`Unknown type ${play.type}`);
     }
     return result;
+}
+
+function playFor(performance: Performance):Play {
+    return plays[performance.playID];
 }
 
 // 修改完毕后，执行单测，发现正常
