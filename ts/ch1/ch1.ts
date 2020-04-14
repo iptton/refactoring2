@@ -1,15 +1,20 @@
 import { isMainThread } from "worker_threads";
 
-let plays:{[key: string]: {"name":string,"type":"tragedy" | "comedy";};} = {
+interface Play{"name":string,"type":"tragedy" | "comedy";};
+interface Plays{[key: string]: Play}
+
+let plays:Plays = {
     "hamlet": {"name": "Hamlet", "type": "tragedy"},
     "as-like": {"name": "As You Like It", "type": "comedy"},
     "othello": {"name": "Othello", "type": "tragedy"}
 };
 
-let invoices:{
+interface Performance{"playID":string, "audience":number}
+interface Invoice{
     "customer":string,
-    "performances": {"playID":string, "audience":number}[]
-}[] = [
+    "performances": Performance[]
+}
+let invoices:Invoice[] = [
     {
         "customer": "BigCo",
         "performances": [
@@ -30,11 +35,8 @@ let invoices:{
 ];
 
 function statement(
-    invoice:{
-        "customer":string,
-        "performances": {"playID":string, "audience":number}[]
-    },
-    plays:{[key: string]: {"name":string,"type":string;};}
+    invoice:Invoice,
+    plays:Plays
 ):string{
     let totalAmount = 0;
     let volumeCredits = 0;
@@ -44,25 +46,7 @@ function statement(
 
     for(let pref of invoice.performances){
         const play = plays[pref.playID];
-        let thisAmount = 0;
-
-        switch (play.type) {
-            case "tragedy":
-                thisAmount = 40_000;
-                if(pref.audience > 30) {
-                    thisAmount += 1000 * (pref.audience - 30);
-                }
-                break;
-            case "comedy":
-                thisAmount = 30_000;
-                if(pref.audience > 20) {
-                    thisAmount += 10_000 + 500 * (pref.audience -  20);
-                }
-                thisAmount += 300 * pref.audience;
-                break;
-            default:
-                throw new Error(`Unknown type ${play.type}`);
-        }
+        let thisAmount = amountFor(pref,play);
 
         // add volume credits
         volumeCredits += Math.max(pref.audience - 30, 0);
@@ -86,7 +70,34 @@ function main(){
 }
 
 // 第一步，拆解
-// ac
+// 第一个引起注意的是 switch 语句。
+// 他们格式类似，可以转换成一个函数
+
+// 首先，检查哪些变量会离开原本的作用域
+// 此例中是： pref / play 和 thisAmount 
+// 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
+// 因此，可以将之当成函数返回值
+function amountFor(pref:Performance, play:Play) {
+    let thisAmount = 0;
+    switch (play.type) {
+        case "tragedy":
+            thisAmount = 40_000;
+            if(pref.audience > 30) {
+                thisAmount += 1000 * (pref.audience - 30);
+            }
+            break;
+        case "comedy":
+            thisAmount = 30_000;
+            if(pref.audience > 20) {
+                thisAmount += 10_000 + 500 * (pref.audience -  20);
+            }
+            thisAmount += 300 * pref.audience;
+            break;
+        default:
+            throw new Error(`Unknown type ${play.type}`);
+    }
+    return thisAmount;
+}
 
 module.exports = {
     plays: plays,
