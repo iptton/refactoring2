@@ -45,16 +45,15 @@ function statement(
         { style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
 
     for(let perf of invoice.performances){
-        const play = plays[perf.playID];
-        let thisAmount = amountFor(perf);
+        let thisAmount = amountFor(perf,playFor(perf));
 
         // add volume credits
         volumeCredits += Math.max(perf.audience - 30, 0);
         // add extra credit for every ten comedy attendees
-        if(play.type == "comedy") volumeCredits += Math.floor(perf.audience / 5);
+        if(playFor(perf).type == "comedy") volumeCredits += Math.floor(perf.audience / 5);
 
         // print line for this order
-        result += `${play.name}: ${format(thisAmount/100)} (${perf.audience}) seats)\n`
+        result += `${playFor(perf).name}: ${format(thisAmount/100)} (${perf.audience}) seats)\n`
         totalAmount += thisAmount;
     }
 
@@ -77,8 +76,7 @@ function main(){
 // 此例中是： pref / play 和 thisAmount 
 // 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
 // 因此，可以将之当成函数返回值
-function amountFor(aPerformance:Performance) {
-    let play = playFor(aPerformance);
+function amountFor(aPerformance:Performance,play:Play) {
     let result = 0;
     switch (play.type) {
         case "tragedy":
@@ -113,3 +111,6 @@ module.exports = {
     invoices: invoices,
     statement: statement
 }
+
+
+main();
