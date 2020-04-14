@@ -38,30 +38,34 @@ function statement(
     invoice:Invoice,
     plays:Plays
 ):string{
+    return renderPlainText(invoice);
+}
+
+function renderPlainText(invoice: Invoice) {
     let result = `Statement for ${invoice.customer}\n`;
-    for(let perf of invoice.performances){
+    for (let perf of invoice.performances) {
         // print line for this order
-        result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}) seats)\n`
+        result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}) seats)\n`;
     }
     result += `Amount owed is ${usd(totalAmountFor(invoice))}\n`;
     result += `You earned ${creditsFor(invoice)} credits\n`;
     return result;
 }
 
-function totalAmountFor(invoice: Invoice) {
-    let totalAmount = 0;
+function totalAmountFor(invoice: Invoice):number {
+    let result = 0;
     for (let perf of invoice.performances) {
-        totalAmount += amountFor(perf);
+        result += amountFor(perf);
     }
-    return totalAmount;
+    return result;
 }
 
 function creditsFor(invoice: Invoice):number {
-    let volumeCredits = 0;
+    let result = 0;
     for (let perf of invoice.performances) {
-        volumeCredits += volumeCreditsFor(perf);
+        result += volumeCreditsFor(perf);
     }
-    return volumeCredits;
+    return result;
 }
 
 function volumeCreditsFor(perf:Performance): number {
