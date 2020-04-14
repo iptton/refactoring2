@@ -38,10 +38,11 @@ function statement(
     invoice:Invoice,
     plays:Plays
 ):string{
-    return renderPlainText(invoice);
+    const statementData = {}
+    return renderPlainText(statementData, invoice);
 }
 
-function renderPlainText(invoice: Invoice) {
+function renderPlainText(statementData,invoice: Invoice) {
     let result = `Statement for ${invoice.customer}\n`;
     for (let perf of invoice.performances) {
         // print line for this order
