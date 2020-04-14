@@ -44,17 +44,17 @@ function statement(
     const format = new Intl.NumberFormat("en-US",
         { style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
 
-    for(let pref of invoice.performances){
-        const play = plays[pref.playID];
-        let thisAmount = amountFor(pref,play);
+    for(let perf of invoice.performances){
+        const play = plays[perf.playID];
+        let thisAmount = amountFor(perf,play);
 
         // add volume credits
-        volumeCredits += Math.max(pref.audience - 30, 0);
+        volumeCredits += Math.max(perf.audience - 30, 0);
         // add extra credit for every ten comedy attendees
-        if(play.type == "comedy") volumeCredits += Math.floor(pref.audience / 5);
+        if(play.type == "comedy") volumeCredits += Math.floor(perf.audience / 5);
 
         // print line for this order
-        result += `${play.name}: ${format(thisAmount/100)} (${pref.audience}) seats)\n`
+        result += `${play.name}: ${format(thisAmount/100)} (${perf.audience}) seats)\n`
         totalAmount += thisAmount;
     }
 
@@ -77,21 +77,21 @@ function main(){
 // 此例中是： pref / play 和 thisAmount 
 // 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
 // 因此，可以将之当成函数返回值
-function amountFor(pref:Performance, play:Play) {
+function amountFor(aPerformance:Performance, play:Play) {
     let result = 0;
     switch (play.type) {
         case "tragedy":
             result = 40_000;
-            if(pref.audience > 30) {
-                result += 1000 * (pref.audience - 30);
+            if(aPerformance.audience > 30) {
+                result += 1000 * (aPerformance.audience - 30);
             }
             break;
         case "comedy":
             result = 30_000;
-            if(pref.audience > 20) {
-                result += 10_000 + 500 * (pref.audience -  20);
+            if(aPerformance.audience > 20) {
+                result += 10_000 + 500 * (aPerformance.audience -  20);
             }
-            result += 300 * pref.audience;
+            result += 300 * aPerformance.audience;
             break;
         default:
             throw new Error(`Unknown type ${play.type}`);
