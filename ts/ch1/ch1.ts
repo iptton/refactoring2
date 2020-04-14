@@ -45,7 +45,7 @@ function statement(
         { style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
 
     for(let perf of invoice.performances){
-        let thisAmount = amountFor(perf,playFor(perf));
+        let thisAmount = amountFor(perf);
 
         // add volume credits
         volumeCredits += Math.max(perf.audience - 30, 0);
@@ -76,9 +76,9 @@ function main(){
 // 此例中是： pref / play 和 thisAmount 
 // 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
 // 因此，可以将之当成函数返回值
-function amountFor(aPerformance:Performance,play:Play) {
+function amountFor(aPerformance:Performance) {
     let result = 0;
-    switch (play.type) {
+    switch (playFor(aPerformance).type) {
         case "tragedy":
             result = 40_000;
             if(aPerformance.audience > 30) {
@@ -93,7 +93,7 @@ function amountFor(aPerformance:Performance,play:Play) {
             result += 300 * aPerformance.audience;
             break;
         default:
-            throw new Error(`Unknown type ${play.type}`);
+            throw new Error(`Unknown type ${playFor(aPerformance).type}`);
     }
     return result;
 }
