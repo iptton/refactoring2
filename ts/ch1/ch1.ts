@@ -38,13 +38,16 @@ function statement(
     invoice:Invoice,
     plays:Plays
 ):string{
-    const statementData = {}
+    const statementData:{customer:string, performances:Performance[]} = {
+        customer: invoice.customer,
+        performances: invoice.performances
+    }
     return renderPlainText(statementData, invoice);
 }
 
-function renderPlainText(statementData,invoice: Invoice) {
-    let result = `Statement for ${invoice.customer}\n`;
-    for (let perf of invoice.performances) {
+function renderPlainText(data,invoice: Invoice) {
+    let result = `Statement for ${data.customer}\n`;
+    for (let perf of data.performances) {
         // print line for this order
         result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}) seats)\n`;
     }
@@ -92,7 +95,7 @@ function main(){
 // 此例中是： pref / play 和 thisAmount
 // 前两个会被提炼传参不会再被修改，只有 thisAmount 会被修改。
 // 因此，可以将之当成函数返回值
-function amountFor(aPerformance:Performance) {
+export default function amountFor(aPerformance:Performance) {
     let result = 0;
     switch (playFor(aPerformance).type) {
         case "tragedy":
